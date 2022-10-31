@@ -54,7 +54,9 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:layout_weight="1"
+
             android:text="@string/add" />
+
 
         <Button
             android:id="@+id/findBtn"
@@ -62,6 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:layout_weight="1"
+            android:onClick="lookupProduct"
             android:text="@string/find" />
 
         <Button
@@ -70,6 +73,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:layout_weight="1"
+            android:onClick="removeProduct"
             android:text="@string/delete" />
     </LinearLayout>
 

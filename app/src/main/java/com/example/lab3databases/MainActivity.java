@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -67,15 +68,28 @@ public class MainActivity extends AppCompatActivity {
         findBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Find product", Toast.LENGTH_SHORT).show();
+                lookupProduct(v);
             }
         });
 
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Delete product", Toast.LENGTH_SHORT).show();
+                Log.d("tag","Hi1");
+                boolean result = dbHandler.deleteProduct(productName.getText().toString());
+
+                Log.d("tag","Hi");
+
+                if (result) {
+                    productId.setText("Record Deleted");
+                    productName.setText("");
+                    productPrice.setText("");
+                } else
+                    productId.setText("No Match Found");
+
+                viewProducts();
             }
+
         });
 
 
@@ -95,5 +109,27 @@ public class MainActivity extends AppCompatActivity {
 
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, productList);
         productListView.setAdapter(adapter);
+    }
+
+    public void  lookupProduct(View view) {
+        MyDBHandler dbHandler = new MyDBHandler(this);
+
+        ArrayList<Product> product = null;
+
+        if(!productName.getText().toString().isEmpty() && productPrice.getText().toString().isEmpty()) {
+            product = dbHandler.search(productName.getText().toString());
+        }
+        else if(productName.getText().toString().isEmpty() && !productPrice.getText().toString().isEmpty()) {
+            product = dbHandler.search(Double.valueOf(productPrice.getText().toString()));
+        }
+        else if(!productName.getText().toString().isEmpty() && !productPrice.getText().toString().isEmpty()) {
+            product = dbHandler.search(productName.getText().toString(), Double.valueOf(productPrice.getText().toString()));
+        }
+        if(product != null){
+            //productId.setText(String.valueOf(product.getId()));
+           // productPrice.setText(String.valueOf(product.getProductPrice()));
+        }
+        else
+            productId.setText("No Match Found");
     }
 }

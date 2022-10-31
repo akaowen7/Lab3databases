@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
 import java.util.*;
 
 public class MyDBHandler extends SQLiteOpenHelper {
@@ -12,7 +14,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_PRODUCT_NAME = "name";
     private static final String COLUMN_PRODUCT_PRICE = "price";
-    private static final String DATABASE_NAME = "products.db";
+    private static final String DATABASE_NAME = "product.db";
     private static final int DATABASE_VERSION = 1;
 
     public MyDBHandler(Context context) {
@@ -21,10 +23,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String create_table_cmd = "CREATE TABLE " + TABLE_NAME +
-                "(" + COLUMN_ID + "INTEGER PRIMARY KEY, " +
-                COLUMN_PRODUCT_NAME + " TEXT, " +
-                COLUMN_PRODUCT_PRICE + " DOUBLE " + ")";
+        String create_table_cmd = "CREATE TABLE " + TABLE_NAME + "(" + COLUMN_ID + " INTEGER PRIMARY KEY, " + COLUMN_PRODUCT_NAME + " TEXT, " + COLUMN_PRODUCT_PRICE + " DOUBLE " + ")";
 
         db.execSQL(create_table_cmd);
     }
@@ -107,14 +106,16 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
     public boolean deleteProduct(String productName){
         boolean result = false;
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase();
 
         String search = "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_PRODUCT_NAME + " = \"" + productName + "\"";
 
         Cursor c = db.rawQuery(search, null);
 
         if (c.moveToFirst()){
-            db.delete(TABLE_NAME, COLUMN_ID + " = " + c.getString(0), null);
+            String idstr = c.getString(0);
+            Log.d("Tag", "huh " + idstr);
+            db.delete(TABLE_NAME, COLUMN_ID + " = " + idstr, null);
             result = true;
         }
 

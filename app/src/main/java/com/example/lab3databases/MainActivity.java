@@ -126,10 +126,18 @@ public class MainActivity extends AppCompatActivity {
             product = dbHandler.search(productName.getText().toString(), Double.valueOf(productPrice.getText().toString()));
         }
         if(product != null){
-            //productId.setText(String.valueOf(product.getId()));
-           // productPrice.setText(String.valueOf(product.getProductPrice()));
+            productList.clear();
+            for (Product p: product) {
+                productList.add(p.getProductName() + " (" + p.getProductPrice() + ")");
+            }
+            adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, productList);
+            productListView.setAdapter(adapter);
         }
         else
             productId.setText("No Match Found");
+    }
+
+    public void removeProduct(View view){
+        return;
     }
 }

@@ -26,6 +26,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         String create_table_cmd = "CREATE TABLE " + TABLE_NAME + "(" + COLUMN_ID + " INTEGER PRIMARY KEY, " + COLUMN_PRODUCT_NAME + " TEXT, " + COLUMN_PRODUCT_PRICE + " DOUBLE " + ")";
 
         db.execSQL(create_table_cmd);
+        //addProduct(new Product("Thing 1", 20));
     }
 
     @Override
@@ -47,6 +48,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
         values.put(COLUMN_PRODUCT_NAME, product.getProductName());
         values.put(COLUMN_PRODUCT_PRICE, product.getProductPrice());
+
+        values.put(COLUMN_ID, getData().getCount());
 
         db.insert(TABLE_NAME, null, values);
         db.close();
